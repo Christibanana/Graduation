@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.JdApprovalRecordMapper">
+
+    <insert id="insertJdApprovalRecord" parameterType="JdApprovalRecord" useGeneratedKeys="true" keyProperty="id">
+        insert into jd_approval_record
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="applicationId != null">application_id,</if>
+            <if test="action != null and action != ''">action,</if>
+            <if test="operatorId != null">operator_id,</if>
+            <if test="opinion != null">opinion,</if>
+            <if test="operateTime != null">operate_time,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="remark != null">remark,</if>
+            <if test="delFlag != null">del_flag,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="applicationId != null">#{applicationId},</if>
+            <if test="action != null and action != ''">#{action},</if>
+            <if test="operatorId != null">#{operatorId},</if>
+            <if test="opinion != null">#{opinion},</if>
+            <if test="operateTime != null">#{operateTime},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="remark != null">#{remark},</if>
+            <if test="delFlag != null">#{delFlag},</if>
+        </trim>
+    </insert>
+</mapper>
