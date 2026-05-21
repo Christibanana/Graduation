@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.JdInstitutionMapper">
+    
+    <resultMap type="JdInstitution" id="JdInstitutionResult">
+        <result property="id"    column="id"    />
+        <result property="name"    column="name"    />
+        <result property="licenseNo"    column="license_no"    />
+        <result property="creditCode"    column="credit_code"    />
+        <result property="legalRepresentative"    column="legal_representative"    />
+        <result property="principal"    column="principal"    />
+        <result property="region"    column="region"    />
+        <result property="address"    column="address"    />
+        <result property="phone"    column="phone"    />
+        <result property="businessScope"    column="business_scope"    />
+        <result property="licenseValidFrom"    column="license_valid_from"    />
+        <result property="licenseValidTo"    column="license_valid_to"    />
+        <result property="status"    column="status"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="remark"    column="remark"    />
+        <result property="delFlag"    column="del_flag"    />
+    </resultMap>
+
+    <sql id="selectJdInstitutionVo">
+        select id, name, license_no, credit_code, legal_representative, principal, region, address, phone, business_scope, license_valid_from, license_valid_to, status, create_by, create_time, update_by, update_time, remark, del_flag from jd_institution
+    </sql>
+
+    <select id="selectJdInstitutionList" parameterType="JdInstitution" resultMap="JdInstitutionResult">
+        <include refid="selectJdInstitutionVo"/>
+        <where>  
+            <if test="id != null "> and id = #{id}</if>
+            <if test="name != null  and name != ''"> and name like concat('%', #{name}, '%')</if>
+            <if test="licenseNo != null  and licenseNo != ''"> and license_no = #{licenseNo}</if>
+            <if test="principal != null  and principal != ''"> and principal = #{principal}</if>
+            <if test="region != null  and region != ''"> and region = #{region}</if>
+            <if test="businessScope != null  and businessScope != ''"> and business_scope = #{businessScope}</if>
+            <if test="licenseValidTo != null "> and license_valid_to = #{licenseValidTo}</if>
+            <if test="status != null  and status != ''"> and status = #{status}</if>
+        </where>
+    </select>
+    
+    <select id="selectJdInstitutionById" parameterType="Long" resultMap="JdInstitutionResult">
+        <include refid="selectJdInstitutionVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertJdInstitution" parameterType="JdInstitution" useGeneratedKeys="true" keyProperty="id">
+        insert into jd_institution
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="name != null and name != ''">name,</if>
+            <if test="licenseNo != null and licenseNo != ''">license_no,</if>
+            <if test="creditCode != null">credit_code,</if>
+            <if test="legalRepresentative != null">legal_representative,</if>
+            <if test="principal != null">principal,</if>
+            <if test="region != null">region,</if>
+            <if test="address != null">address,</if>
+            <if test="phone != null">phone,</if>
+            <if test="businessScope != null">business_scope,</if>
+            <if test="licenseValidFrom != null">license_valid_from,</if>
+            <if test="licenseValidTo != null">license_valid_to,</if>
+            <if test="status != null">status,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="remark != null">remark,</if>
+            <if test="delFlag != null">del_flag,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="name != null and name != ''">#{name},</if>
+            <if test="licenseNo != null and licenseNo != ''">#{licenseNo},</if>
+            <if test="creditCode != null">#{creditCode},</if>
+            <if test="legalRepresentative != null">#{legalRepresentative},</if>
+            <if test="principal != null">#{principal},</if>
+            <if test="region != null">#{region},</if>
+            <if test="address != null">#{address},</if>
+            <if test="phone != null">#{phone},</if>
+            <if test="businessScope != null">#{businessScope},</if>
+            <if test="licenseValidFrom != null">#{licenseValidFrom},</if>
+            <if test="licenseValidTo != null">#{licenseValidTo},</if>
+            <if test="status != null">#{status},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="remark != null">#{remark},</if>
+            <if test="delFlag != null">#{delFlag},</if>
+         </trim>
+    </insert>
+
+    <update id="updateJdInstitution" parameterType="JdInstitution">
+        update jd_institution
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="name != null and name != ''">name = #{name},</if>
+            <if test="licenseNo != null and licenseNo != ''">license_no = #{licenseNo},</if>
+            <if test="creditCode != null">credit_code = #{creditCode},</if>
+            <if test="legalRepresentative != null">legal_representative = #{legalRepresentative},</if>
+            <if test="principal != null">principal = #{principal},</if>
+            <if test="region != null">region = #{region},</if>
+            <if test="address != null">address = #{address},</if>
+            <if test="phone != null">phone = #{phone},</if>
+            <if test="businessScope != null">business_scope = #{businessScope},</if>
+            <if test="licenseValidFrom != null">license_valid_from = #{licenseValidFrom},</if>
+            <if test="licenseValidTo != null">license_valid_to = #{licenseValidTo},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="remark != null">remark = #{remark},</if>
+            <if test="delFlag != null">del_flag = #{delFlag},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteJdInstitutionById" parameterType="Long">
+        delete from jd_institution where id = #{id}
+    </delete>
+
+    <delete id="deleteJdInstitutionByIds" parameterType="String">
+        delete from jd_institution where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>
