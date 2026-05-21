@@ -15,8 +15,8 @@ ruoyi:
 
 # 开发环境配置
 server:
-  # 服务器的HTTP端口，默认为8080
-  port: 8080
+  # 服务器的HTTP端口，为8081
+  port: 8081
   servlet:
     # 应用的访问路径
     context-path: /
@@ -125,9 +125,9 @@ springdoc:
     path: /swagger-ui.html
     tags-sorter: alpha
   group-configs:
-    - group: 'default'
-      display-name: '测试模块'
-      paths-to-match: '/**'
+    - group: "default"
+      display-name: "测试模块"
+      paths-to-match: "/**"
       packages-to-scan: com.ruoyi.web.controller.tool
 
 # 防盗链配置

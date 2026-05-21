@@ -63,6 +63,8 @@
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
                     <addResources>true</addResources>
+                    <skip>false</skip>
+                    <mainClass>com.ruoyi.RuoYiApplication</mainClass>
                 </configuration>
                 <executions>
                     <execution>
