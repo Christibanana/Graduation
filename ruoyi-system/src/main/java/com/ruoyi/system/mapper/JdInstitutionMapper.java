@@ -1,7 +1,10 @@
 package com.ruoyi.system.mapper;
 
 import java.util.List;
+import com.ruoyi.system.domain.bo.JdLicenseWarningQuery;
 import com.ruoyi.system.domain.JdInstitution;
+import com.ruoyi.system.domain.vo.JdInstitutionWarningVo;
+import com.ruoyi.system.domain.vo.PublicJdInstitutionVo;
 
 /**
  * 司法鉴定机构Mapper接口
@@ -26,6 +29,16 @@ public interface JdInstitutionMapper
      * @return 司法鉴定机构集合
      */
     public List<JdInstitution> selectJdInstitutionList(JdInstitution jdInstitution);
+
+    /**
+     * 查询司法鉴定机构公开名册列表
+     *
+     * @param jdInstitution 查询条件
+     * @return 司法鉴定机构公开名册集合
+     */
+    public List<PublicJdInstitutionVo> selectPublicJdInstitutionList(JdInstitution jdInstitution);
+
+    public List<JdInstitutionWarningVo> selectJdInstitutionWarningList(JdLicenseWarningQuery query);
 
     /**
      * 新增司法鉴定机构

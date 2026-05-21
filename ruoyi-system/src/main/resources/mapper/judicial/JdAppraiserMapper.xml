@@ -41,6 +41,52 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="status != null  and status != ''"> and status = #{status}</if>
         </where>
     </select>
+
+    <select id="selectPublicJdAppraiserList" parameterType="com.ruoyi.system.domain.bo.PublicJdAppraiserQuery" resultType="com.ruoyi.system.domain.vo.PublicJdAppraiserVo">
+        select a.id, a.name, a.practice_cert_no as practiceCertNo, i.name as institutionName,
+               a.practice_category as practiceCategory, a.cert_valid_to as certValidTo, a.status
+        from jd_appraiser a
+        left join jd_institution i on a.institution_id = i.id and i.del_flag = '0'
+        <where>
+            a.del_flag = '0'
+            <if test="name != null and name != ''"> and a.name like concat('%', #{name}, '%')</if>
+            <if test="practiceCertNo != null and practiceCertNo != ''"> and a.practice_cert_no = #{practiceCertNo}</if>
+            <if test="institutionName != null and institutionName != ''"> and i.name like concat('%', #{institutionName}, '%')</if>
+            <if test="practiceCategory != null and practiceCategory != ''"> and a.practice_category = #{practiceCategory}</if>
+            <if test="status != null and status != ''"> and a.status = #{status}</if>
+        </where>
+        order by i.name asc, a.id asc
+    </select>
+
+    <select id="selectJdAppraiserWarningList" parameterType="com.ruoyi.system.domain.bo.JdLicenseWarningQuery" resultType="com.ruoyi.system.domain.vo.JdAppraiserWarningVo">
+        select a.id, a.name, a.practice_cert_no as practiceCertNo, a.institution_id as institutionId,
+               i.name as institutionName, a.practice_category as practiceCategory,
+               a.cert_valid_to as certValidTo, a.status,
+               case
+                   when a.cert_valid_to &lt; curdate() then 'EXPIRED'
+                   else 'EXPIRING'
+               end as warningType
+        from jd_appraiser a
+        left join jd_institution i on a.institution_id = i.id and (i.del_flag is null or i.del_flag != '2')
+        <where>
+            a.cert_valid_to is not null
+            and (a.del_flag is null or a.del_flag != '2')
+            and (a.status is null or a.status != 'CANCELLED')
+            <choose>
+                <when test="warningType != null and warningType == 'EXPIRED'">
+                    and a.cert_valid_to &lt; curdate()
+                </when>
+                <when test="warningType != null and warningType == 'EXPIRING'">
+                    and a.cert_valid_to &gt;= curdate()
+                    and a.cert_valid_to &lt;= date_add(curdate(), interval 90 day)
+                </when>
+                <otherwise>
+                    and a.cert_valid_to &lt;= date_add(curdate(), interval 90 day)
+                </otherwise>
+            </choose>
+        </where>
+        order by a.cert_valid_to asc, a.id asc
+    </select>
     
     <select id="selectJdAppraiserById" parameterType="Long" resultMap="JdAppraiserResult">
         <include refid="selectJdAppraiserVo"/>

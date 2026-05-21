@@ -43,6 +43,47 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="status != null  and status != ''"> and status = #{status}</if>
         </where>
     </select>
+
+    <select id="selectPublicJdInstitutionList" parameterType="JdInstitution" resultType="com.ruoyi.system.domain.vo.PublicJdInstitutionVo">
+        select id, name, license_no as licenseNo, region, address, phone, business_scope as businessScope,
+               license_valid_to as licenseValidTo, status
+        from jd_institution
+        <where>
+            del_flag = '0'
+            <if test="name != null and name != ''"> and name like concat('%', #{name}, '%')</if>
+            <if test="region != null and region != ''"> and region = #{region}</if>
+            <if test="businessScope != null and businessScope != ''"> and business_scope like concat('%', #{businessScope}, '%')</if>
+            <if test="status != null and status != ''"> and status = #{status}</if>
+        </where>
+        order by region asc, id asc
+    </select>
+
+    <select id="selectJdInstitutionWarningList" parameterType="com.ruoyi.system.domain.bo.JdLicenseWarningQuery" resultType="com.ruoyi.system.domain.vo.JdInstitutionWarningVo">
+        select id, name, license_no as licenseNo, region, phone, license_valid_to as licenseValidTo, status,
+               case
+                   when license_valid_to &lt; curdate() then 'EXPIRED'
+                   else 'EXPIRING'
+               end as warningType
+        from jd_institution
+        <where>
+            license_valid_to is not null
+            and (del_flag is null or del_flag != '2')
+            and (status is null or status != 'CANCELLED')
+            <choose>
+                <when test="warningType != null and warningType == 'EXPIRED'">
+                    and license_valid_to &lt; curdate()
+                </when>
+                <when test="warningType != null and warningType == 'EXPIRING'">
+                    and license_valid_to &gt;= curdate()
+                    and license_valid_to &lt;= date_add(curdate(), interval 90 day)
+                </when>
+                <otherwise>
+                    and license_valid_to &lt;= date_add(curdate(), interval 90 day)
+                </otherwise>
+            </choose>
+        </where>
+        order by license_valid_to asc, id asc
+    </select>
     
     <select id="selectJdInstitutionById" parameterType="Long" resultMap="JdInstitutionResult">
         <include refid="selectJdInstitutionVo"/>

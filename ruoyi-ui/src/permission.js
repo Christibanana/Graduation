@@ -3,13 +3,16 @@ import store from './store'
 import { Message } from 'element-ui'
 import NProgress from 'nprogress'
 import 'nprogress/nprogress.css'
-import { getToken } from '@/utils/auth'
+import { getToken, removeToken } from '@/utils/auth'
 import { isPathMatch } from '@/utils/validate'
 import { isRelogin } from '@/utils/request'
 
 NProgress.configure({ showSpinner: false })
 
 const whiteList = ['/login', '/register']
+
+// 每次重新打开或刷新前端应用时清理旧登录态，保证进入系统必须重新登录。
+removeToken()
 
 const isWhiteList = (path) => {
   return whiteList.some(pattern => isPathMatch(pattern, path))

@@ -1,7 +1,11 @@
 package com.ruoyi.system.mapper;
 
 import java.util.List;
+import com.ruoyi.system.domain.bo.JdLicenseWarningQuery;
+import com.ruoyi.system.domain.bo.PublicJdAppraiserQuery;
 import com.ruoyi.system.domain.JdAppraiser;
+import com.ruoyi.system.domain.vo.JdAppraiserWarningVo;
+import com.ruoyi.system.domain.vo.PublicJdAppraiserVo;
 
 /**
  * 司法鉴定人Mapper接口
@@ -26,6 +30,16 @@ public interface JdAppraiserMapper
      * @return 司法鉴定人集合
      */
     public List<JdAppraiser> selectJdAppraiserList(JdAppraiser jdAppraiser);
+
+    /**
+     * 查询司法鉴定人公开名册列表
+     *
+     * @param query 查询条件
+     * @return 司法鉴定人公开名册集合
+     */
+    public List<PublicJdAppraiserVo> selectPublicJdAppraiserList(PublicJdAppraiserQuery query);
+
+    public List<JdAppraiserWarningVo> selectJdAppraiserWarningList(JdLicenseWarningQuery query);
 
     /**
      * 新增司法鉴定人
