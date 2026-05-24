@@ -7,6 +7,22 @@
           <svg-icon slot="prefix" icon-class="user" class="el-input__icon input-icon" />
         </el-input>
       </el-form-item>
+      <el-form-item prop="nickName">
+        <el-input v-model="registerForm.nickName" type="text" auto-complete="off" placeholder="姓名/机构名称">
+          <svg-icon slot="prefix" icon-class="user" class="el-input__icon input-icon" />
+        </el-input>
+      </el-form-item>
+      <el-form-item prop="phonenumber">
+        <el-input v-model="registerForm.phonenumber" type="text" auto-complete="off" placeholder="联系电话">
+          <svg-icon slot="prefix" icon-class="phone" class="el-input__icon input-icon" />
+        </el-input>
+      </el-form-item>
+      <el-form-item prop="userType">
+        <el-radio-group v-model="registerForm.userType" class="register-type">
+          <el-radio-button label="appraiser">鉴定人</el-radio-button>
+          <el-radio-button label="institution">机构</el-radio-button>
+        </el-radio-group>
+      </el-form-item>
       <el-form-item prop="password" :rules="registerPwdValidator">
         <el-input
           v-model="registerForm.password"
@@ -80,6 +96,9 @@ export default {
       codeUrl: "",
       registerForm: {
         username: "",
+        nickName: "",
+        phonenumber: "",
+        userType: "appraiser",
         password: "",
         confirmPassword: "",
         code: "",
@@ -96,6 +115,14 @@ export default {
           { required: true, trigger: "blur", message: "请输入您的账号" },
           { min: 2, max: 20, message: '用户账号长度必须介于 2 和 20 之间', trigger: 'blur' }
         ],
+        nickName: [
+          { required: true, trigger: "blur", message: "请输入姓名或机构名称" },
+          { max: 30, message: "名称长度不能超过 30 个字符", trigger: "blur" }
+        ],
+        phonenumber: [
+          { pattern: /^1[3-9]\d{9}$|^0\d{2,3}-?\d{7,8}$/, message: "请输入正确的联系电话", trigger: "blur" }
+        ],
+        userType: [{ required: true, trigger: "change", message: "请选择注册类型" }],
         confirmPassword: [
           { required: true, message: "请再次输入您的密码", trigger: "blur" },
           {
@@ -180,6 +207,16 @@ export default {
     height: 39px;
     width: 14px;
     margin-left: 2px;
+  }
+}
+.register-type {
+  width: 100%;
+  display: flex;
+  ::v-deep .el-radio-button {
+    flex: 1;
+  }
+  ::v-deep .el-radio-button__inner {
+    width: 100%;
   }
 }
 .register-tip {

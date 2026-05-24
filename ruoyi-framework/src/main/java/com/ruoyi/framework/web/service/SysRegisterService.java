@@ -5,6 +5,7 @@ import org.springframework.stereotype.Component;
 import com.ruoyi.common.constant.CacheConstants;
 import com.ruoyi.common.constant.Constants;
 import com.ruoyi.common.constant.UserConstants;
+import com.ruoyi.common.core.domain.entity.SysRole;
 import com.ruoyi.common.core.domain.entity.SysUser;
 import com.ruoyi.common.core.domain.model.RegisterBody;
 import com.ruoyi.common.core.redis.RedisCache;
@@ -16,6 +17,7 @@ import com.ruoyi.common.utils.SecurityUtils;
 import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.framework.manager.AsyncManager;
 import com.ruoyi.framework.manager.factory.AsyncFactory;
+import com.ruoyi.system.mapper.SysRoleMapper;
 import com.ruoyi.system.service.ISysConfigService;
 import com.ruoyi.system.service.ISysUserService;
 
@@ -27,8 +29,19 @@ import com.ruoyi.system.service.ISysUserService;
 @Component
 public class SysRegisterService
 {
+    private static final String USER_TYPE_APPRAISER = "appraiser";
+
+    private static final String USER_TYPE_INSTITUTION = "institution";
+
+    private static final String ROLE_KEY_APPRAISER = "jd_appraiser";
+
+    private static final String ROLE_KEY_INSTITUTION = "jd_institution";
+
     @Autowired
     private ISysUserService userService;
+
+    @Autowired
+    private SysRoleMapper roleMapper;
 
     @Autowired
     private ISysConfigService configService;
@@ -42,6 +55,7 @@ public class SysRegisterService
     public String register(RegisterBody registerBody)
     {
         String msg = "", username = registerBody.getUsername(), password = registerBody.getPassword();
+        String userType = registerBody.getUserType();
         SysUser sysUser = new SysUser();
         sysUser.setUserName(username);
 
@@ -74,12 +88,26 @@ public class SysRegisterService
         {
             msg = "保存用户'" + username + "'失败，注册账号已存在";
         }
+        else if (!USER_TYPE_APPRAISER.equals(userType) && !USER_TYPE_INSTITUTION.equals(userType))
+        {
+            msg = "请选择注册类型";
+        }
         else
         {
-            sysUser.setNickName(username);
+            Long roleId = selectRegisterRoleId(userType);
+            if (StringUtils.isNull(roleId))
+            {
+                return "注册角色未初始化，请先执行司法鉴定注册权限初始化脚本";
+            }
+            sysUser.setNickName(StringUtils.isEmpty(registerBody.getNickName()) ? username : registerBody.getNickName());
+            sysUser.setPhonenumber(registerBody.getPhonenumber());
+            sysUser.setStatus(UserConstants.NORMAL);
+            sysUser.setCreateBy(Constants.REGISTER);
+            sysUser.setRemark(USER_TYPE_APPRAISER.equals(userType) ? "注册类型：鉴定人" : "注册类型：机构");
             sysUser.setPwdUpdateDate(DateUtils.getNowDate());
             sysUser.setPassword(SecurityUtils.encryptPassword(password));
-            boolean regFlag = userService.registerUser(sysUser);
+            sysUser.setRoleIds(new Long[] { roleId });
+            boolean regFlag = userService.insertUser(sysUser) > 0;
             if (!regFlag)
             {
                 msg = "注册失败,请联系系统管理人员";
@@ -90,6 +118,17 @@ public class SysRegisterService
             }
         }
         return msg;
+    }
+
+    private Long selectRegisterRoleId(String userType)
+    {
+        String roleKey = USER_TYPE_APPRAISER.equals(userType) ? ROLE_KEY_APPRAISER : ROLE_KEY_INSTITUTION;
+        SysRole role = roleMapper.checkRoleKeyUnique(roleKey);
+        if (StringUtils.isNotNull(role) && StringUtils.equals(UserConstants.ROLE_NORMAL, role.getStatus()))
+        {
+            return role.getRoleId();
+        }
+        return null;
     }
 
     /**

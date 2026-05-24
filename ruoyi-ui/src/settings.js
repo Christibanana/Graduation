@@ -5,7 +5,7 @@ module.exports = {
   title: process.env.VUE_APP_TITLE,
 
   /**
-   * 侧边栏主题 深色主题theme-dark，浅色主题theme-light
+   * 侧边栏主题 theme-dark 深色主题，theme-light 浅色主题
    */
   sideTheme: 'theme-dark',
 
@@ -15,7 +15,7 @@ module.exports = {
   showSettings: true,
 
   /**
-   * 菜单导航模式 1、纯左侧 2、混合（左侧+顶部） 3、纯顶部
+   * 菜单导航模式 1、纯左侧 2、混合（左侧+顶部）3、纯顶部
    */
   navType: 1,
 
@@ -35,7 +35,7 @@ module.exports = {
   tagsIcon: false,
 
   /**
-   * 标签页样式：card 卡片（默认）、chrome 谷歌浏览器风格
+   * 标签页样式：card 卡片（默认）、chrome 浏览器风格
    */
   tagsViewStyle: 'card',
 
@@ -45,7 +45,7 @@ module.exports = {
   fixedHeader: true,
 
   /**
-   * 是否显示logo
+   * 是否显示 logo
    */
   sidebarLogo: true,
 
@@ -62,5 +62,5 @@ module.exports = {
   /**
    * 底部版权文本内容
    */
-  footerContent: 'Copyright © 2018-2026 RuoYi. All Rights Reserved.'
+  footerContent: '司法鉴定平台 · 南昌航空大学科技学院'
 }

@@ -36,8 +36,8 @@ const permission = {
         getRouters().then(res => {
           const sdata = JSON.parse(JSON.stringify(res.data))
           const rdata = JSON.parse(JSON.stringify(res.data))
-          const sidebarRoutes = filterAsyncRouter(sdata)
-          const rewriteRoutes = filterAsyncRouter(rdata, false, true)
+          const sidebarRoutes = filterOfficialSiteMenu(filterAsyncRouter(sdata))
+          const rewriteRoutes = filterOfficialSiteMenu(filterAsyncRouter(rdata, false, true))
           const asyncRoutes = filterDynamicRoutes(dynamicRoutes)
           rewriteRoutes.push({ path: '*', redirect: '/404', hidden: true })
           router.addRoutes(asyncRoutes)
@@ -108,6 +108,22 @@ export function filterDynamicRoutes(routes) {
     }
   })
   return res
+}
+
+function filterOfficialSiteMenu(routes) {
+  return routes
+    .filter(route => !isOfficialSiteMenu(route))
+    .map(route => {
+      if (route.children && route.children.length) {
+        route.children = filterOfficialSiteMenu(route.children)
+      }
+      return route
+    })
+}
+
+function isOfficialSiteMenu(route) {
+  const title = route.meta && route.meta.title
+  return title === '若依官网' || route.path === 'http://ruoyi.vip'
 }
 
 export const loadView = (view) => {

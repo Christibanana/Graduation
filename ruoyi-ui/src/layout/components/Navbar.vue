@@ -12,30 +12,17 @@
       <template v-if="device!=='mobile'">
         <search id="header-search" class="right-menu-item" />
 
-        <el-tooltip content="源码地址" effect="dark" placement="bottom">
-          <ruo-yi-git id="ruoyi-git" class="right-menu-item hover-effect" />
-        </el-tooltip>
-
-        <el-tooltip content="文档地址" effect="dark" placement="bottom">
-          <ruo-yi-doc id="ruoyi-doc" class="right-menu-item hover-effect" />
-        </el-tooltip>
-
         <screenfull id="screenfull" class="right-menu-item hover-effect" />
 
         <el-tooltip content="布局大小" effect="dark" placement="bottom">
           <size-select id="size-select" class="right-menu-item hover-effect" />
         </el-tooltip>
-
-        <el-tooltip content="消息通知" effect="dark" placement="bottom">
-          <header-notice id="header-notice" class="right-menu-item hover-effect" />
-        </el-tooltip>
-
       </template>
 
       <el-dropdown class="avatar-container right-menu-item hover-effect" trigger="hover">
         <div class="avatar-wrapper">
           <img :src="avatar" class="user-avatar">
-          <span class="user-nickname"> {{ nickName }} </span>
+          <span class="user-nickname"> 个人 </span>
         </div>
         <el-dropdown-menu slot="dropdown">
           <router-link to="/user/profile">
@@ -66,9 +53,6 @@ import Hamburger from '@/components/Hamburger'
 import Screenfull from '@/components/Screenfull'
 import SizeSelect from '@/components/SizeSelect'
 import Search from '@/components/HeaderSearch'
-import RuoYiGit from '@/components/RuoYi/Git'
-import RuoYiDoc from '@/components/RuoYi/Doc'
-import HeaderNotice from './HeaderNotice'
 
 export default {
   components: {
@@ -79,17 +63,13 @@ export default {
     Hamburger,
     Screenfull,
     SizeSelect,
-    Search,
-    RuoYiGit,
-    RuoYiDoc,
-    HeaderNotice
+    Search
   },
   computed: {
     ...mapGetters([
       'sidebar',
       'avatar',
-      'device',
-      'nickName'
+      'device'
     ]),
     setting: {
       get() {
@@ -150,7 +130,6 @@ export default {
   box-shadow: 0 1px 4px rgba(0,21,41,.08);
   display: flex;
   align-items: center;
-  // padding: 0 8px;
   box-sizing: border-box;
 
   .hamburger-container {
